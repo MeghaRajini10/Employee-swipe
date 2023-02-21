@@ -8,6 +8,7 @@ public class EmployeeDto {
 	public String branch;
 	public String shift;
 	public String role;
+//	public int number;
 	public long getEmpid() {
 		return empid;
 	}

@@ -1,16 +1,21 @@
 package com.example.employee.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Employee {
-	public long empid;
-	public String empname;
-	public String empemail;
-	public String contactnumber;
-	public String branch;
-	public String shift;
-	public String role;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private  long empid;
+	private  String empname;
+	private  String empemail;
+	private String contactnumber;
+	private String branch;
+	private String shift;
+	private String role;
 	public long getEmpid() {
 		return empid;
 	}

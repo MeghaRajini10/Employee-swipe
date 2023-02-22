@@ -2,6 +2,9 @@ package com.example.employee.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.example.employee.entity.SwipeData;
 
 public class SwipeDataDto {
 	private long swipeid;
@@ -53,6 +56,16 @@ public class SwipeDataDto {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public List<SwipeData> search(SwipeData swipeData, Long empid2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public List<SwipeData> search(SwipeDataDto swipeDataDto, Long empid2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 	
 	
 

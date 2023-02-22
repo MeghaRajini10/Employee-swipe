@@ -2,17 +2,25 @@ package com.example.employee.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 @Entity
 public class SwipeData {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long swipeid;
 	private String empname;
+	
 	private long empid;
-	LocalDateTime swipeintime;
-	LocalDateTime swipeouttime;
-	LocalDate date;
-	private String status;
+	private LocalDateTime swipeintime;
+	private LocalDateTime swipeouttime;
+	private LocalDate date;
+	private String status;;
 	public long getSwipeid() {
 		return swipeid;
 	}
@@ -55,6 +63,8 @@ public class SwipeData {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	 
+	
 	
 
 }

@@ -1,57 +1,39 @@
 package com.example.employee.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Valid
 public class EmployeeDto {
-	public long empid;
+
+	@NotBlank(message = "Employee Name is required")
 	public String empname;
+
+	@Email(message = "Enter a Valid Email address")
 	public String empemail;
+
+	@Pattern(regexp = "^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$", message = "Please enter valid Phone Number")
 	public String contactnumber;
+
 	public String branch;
+
+	@Pattern(regexp = "^(?:D|N)$", message = "Mention the shift(D/N)")
 	public String shift;
+
+	@Pattern(regexp = "^(?:Employee|Admin)$", message = "Specify the role(Employee/Admin)")
 	public String role;
-	public long getEmpid() {
-		return empid;
-	}
-	public void setEmpid(long empid) {
-		this.empid = empid;
-	}
-	public String getEmpname() {
-		return empname;
-	}
-	public void setEmpname(String empname) {
-		this.empname = empname;
-	}
-	public String getEmpemail() {
-		return empemail;
-	}
-	public void setEmpemail(String empemail) {
-		this.empemail = empemail;
-	}
-	public String getContactnumber() {
-		return contactnumber;
-	}
-	public void setContactnumber(String contactnumber) {
-		this.contactnumber = contactnumber;
-	}
-	public String getBranch() {
-		return branch;
-	}
-	public void setBranch(String branch) {
-		this.branch = branch;
-	}
-	public String getShift() {
-		return shift;
-	}
-	public void setShift(String shift) {
-		this.shift = shift;
-	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
-	
-	
-	
 
 }
+
+

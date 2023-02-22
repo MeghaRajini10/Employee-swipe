@@ -43,10 +43,9 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		swipeData.setEmpname(employee.getEmpName());
 		swipeData.setSwipeouttime(null);
 		swipeData.setEmail(employee.getEmail());
-	
 
 		swipeDataRepository.save(swipeData);
-		
+
 		TempSwipeData tempSwipeData = new TempSwipeData();
 		tempSwipeData.setEmpid(swipeData.getEmployee().getEmpId());
 		tempSwipeData.setTempswipedout(null);
@@ -80,31 +79,20 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		return new ResponseDto(list, 200);
 	}
 
-	// shift ends at 17:00 so
-	@Scheduled(cron = "* 22 12 * * *",zone = "Asia/Kolkata")
-	public  void updateEntries() {
-		SwipeData swipeData ;
-		List<TempSwipeData> list= tempSwipeDataRepository.findAll();
+//	@Scheduled(cron = "* * 17 * * *",zone = "Asia/Kolkata")
+	
+	@Scheduled(cron = "* 38 12 * * *", zone = "Asia/Kolkata")
+	public void updateEntries() {
+		List<TempSwipeData> list = new ArrayList<>();
+		list.addAll(tempSwipeDataRepository.findAll());
 		for (TempSwipeData temp : list) {
-			swipeData = swipeDataRepository.findByemail(temp.getEmail());
+			SwipeData swipeData = swipeDataRepository.findByemail(temp.getEmail());
 			swipeData.setSwipeouttime(temp.getTempswipedout());
 			swipeDataRepository.save(swipeData);
 			tempSwipeDataRepository.delete(temp);
 		}
+
 		
-		
-// 		    if(now.getHour()>17) {
-//			List<TempSwipeData> list= tempSwipeDataRepository.findAll();
-//			for(TempSwipeData temp:list) {
-//				swipeData=swipeDataRepository.findByemployee(temp.getEmpid());
-//				swipeData.setSwipeouttime(temp.getTempswipedout());
-//				swipeDataRepository.save(swipeData);
-//			}
-	
-	
 	}
-
-
-
 
 }

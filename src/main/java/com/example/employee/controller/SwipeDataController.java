@@ -24,7 +24,7 @@ public class SwipeDataController {
 	@Operation(summary = "new swiped data")
 	@PostMapping("/")
 	public ResponseEntity<ResponseDto> newSwipedData(@RequestParam String email){
-		return new ResponseEntity<>(swipeDataServiceImpl.newSwipedData(email),HttpStatus.OK);
+		return new ResponseEntity<>(swipeDataServiceImpl.newSwipedData(email),HttpStatus.CREATED);
 	}
 
 	@Operation(summary = "update the logged out time")

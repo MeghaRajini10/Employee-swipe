@@ -36,5 +36,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		ResponseDto response = new ResponseDto(errors,500);
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(SwipedException.class)
+	public ResponseEntity<Object> handleUserNotFoundException(SwipedException ex, WebRequest req) {
+		List<String> errors = new ArrayList<>();
+		errors.add(ex.getMessage());
+		ResponseDto response = new ResponseDto(errors,500);
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
 
 }

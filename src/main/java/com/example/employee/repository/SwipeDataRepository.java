@@ -11,4 +11,6 @@ public interface SwipeDataRepository extends JpaRepository<SwipeData, Integer> {
 
 	SwipeData findByemail(String email);
 
+	boolean existsByEmail(String email);
+
 }

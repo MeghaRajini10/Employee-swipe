@@ -8,6 +8,7 @@ import com.example.employee.entity.SwipeData;
 @Repository
 public interface SwipeDataRepository extends JpaRepository<SwipeData, Integer> {
 
-	SwipeData findByemployee(int empid);
+
+	SwipeData findByemail(String email);
 
 }

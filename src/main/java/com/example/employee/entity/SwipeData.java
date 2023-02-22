@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
 import lombok.Data;
 
 @Entity
@@ -23,6 +22,7 @@ public class SwipeData {
 	private int swipeid;
 	
 	private String empname;
+	private String email;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "empid")

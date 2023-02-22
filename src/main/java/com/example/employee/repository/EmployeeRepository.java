@@ -10,6 +10,4 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer>{
 
 	Employee findByemail(String empemail);
 
-	Employee findByempid(int empid);
-
 }

@@ -1,7 +1,10 @@
 package com.example.employee.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,13 +39,21 @@ public class EmployeeServiceImplTest {
 		emp.setRole("Admin");
 		Mockito.when(empRep.save(emp)).thenReturn(emp);
 		assertEquals("Employee registration is completed", empservimpl.registerEmp(empDto).getMessage());
+		Mockito.when(empRep.findEmployeeByempemail(emp.getEmpemail())).thenReturn(emp);
+		assertNotNull(emp);
 	}
 
 	@Test
-	public void testCreateEntryWithNameIsNullThrowsNPE() {
+	public void CreateEntryTest() {
 		EmployeeDto empDto1 = null;
 		assertNull(empDto1);
 
+	}
+	@Test
+	public void checkFieldsTest() {
+		EmployeeDto empDto=new EmployeeDto("Harshitha", "h4@gmail.com", "7711143567", "ITT", "D", "Employee");
+		assertFalse(empDto.getEmpemail()=="f6@gmail.com");
+		assertTrue(empDto.getEmpname()=="Harshitha");
 	}
 
 }

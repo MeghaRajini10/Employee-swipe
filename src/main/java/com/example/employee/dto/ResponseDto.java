@@ -1,5 +1,6 @@
 package com.example.employee.dto;
 
+<<<<<<< HEAD
 import java.util.List;
 
 public class ResponseDto {
@@ -23,4 +24,20 @@ public class ResponseDto {
 		this.code = code;
 	}
 
+=======
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ResponseDto {
+	
+	String message;
+	
+>>>>>>> 377078e53ca8bdd4a98d6b84a83318911bb9f981
 }

@@ -87,8 +87,8 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		}
 		Employee employee = employeeRepository.findByemail(email);
 		Optional<TempSwipeData> tempSwipeData = tempSwipeDataRepository.findByempid(employee.getEmpId());
-		tempSwipeData.get().setTempswipedout(LocalDateTime.now());
 		if (tempSwipeData.isPresent()) {
+			tempSwipeData.get().setTempswipedout(LocalDateTime.now());
 			TempSwipeData tempSwipeData2 = tempSwipeData.get();
 			tempSwipeDataRepository.save(tempSwipeData2);
 			list.add("updated successfully");
@@ -116,7 +116,7 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		// runs for one minute continuously can be stopped using application context
 	}
 	
-	
+
 	
 	@Override
 	public List<SwipeData> searchSwipeData(String email, String fromDate, String toDate) {

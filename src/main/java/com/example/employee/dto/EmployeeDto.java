@@ -17,7 +17,7 @@ public class EmployeeDto {
 	@Email(message = "Enter a Valid Email address")
 	public String empemail;
 
-	@Pattern(regexp = "^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$", message = "Please enter valid Phone Number")
+	@Pattern(regexp = "[6789][\\d]{9}",message = "Enter a valid indian contact number")
 	public String contactnumber;
 
 	public String branch;

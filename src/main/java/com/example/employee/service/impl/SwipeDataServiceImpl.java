@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import com.example.employee.repository.TempSwipeDataRepository;
 import com.example.employee.service.SwipeDataService;
 
 @Service
+@Transactional
 public class SwipeDataServiceImpl implements SwipeDataService {
 
 	@Autowired
@@ -42,11 +45,12 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 
 	@Override
 	public ResponseDto newSwipedData(String email) {
-		Employee employee = employeeRepository.findByemail(email);
+		
 		if (employeeRepository.findByemail(email) == null) {
 			logger.warn("Employee hasn't registered yet");
 			throw new EmployeeNotFoundException("Employee hasn't registered yet");
 		}
+		Employee employee = employeeRepository.findByemail(email);
 		SwipeData swipeData = new SwipeData();
 		swipeData.setDate(LocalDate.now());
 		swipeData.setSwipeintime(LocalDateTime.now());
@@ -54,11 +58,11 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		swipeData.setEmpname(employee.getEmpName());
 		swipeData.setSwipeouttime(null);
 		swipeData.setEmail(employee.getEmail());
-
+		swipeDataRepository.save(swipeData);
+		
 		LocalDate swippedDate=swipeDataRepository.findByemail(email).getDate();
 		if ( swippedDate==LocalDate.now() && swipeDataRepository.existsByEmail(email) )
 			throw new SwipedException("Employeed already swiped In");
-		swipeDataRepository.save(swipeData);
 
 		TempSwipeData tempSwipeData = new TempSwipeData();
 		tempSwipeData.setEmpid(swipeData.getEmployee().getEmpId());
@@ -73,25 +77,6 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 
 	}
 
-	@Override
-	public List<SwipeData> searchSwipeData(String email, String fromDate, String toDate) {
-		List<SwipeData> list = new ArrayList<>();
-		if (employeeRepository.findByemail(email) == null) {
-			logger.warn("Employee's Swipe data is not available");
-			throw new EmployeeNotFoundException("Employee's Swipe data is not available");
-		}
-		Employee employee = employeeRepository.findByemail(email);
-		
-		if (employee.getRole().equals("admin")) {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-yyyy");
-			LocalDate from = YearMonth.parse(fromDate, formatter).atDay(1);
-			LocalDate to = YearMonth.parse(toDate, formatter).atDay(31);
-			list.addAll(swipeDataRepository.findAllByDateBetween(from,to));
-			return list;
-		}
-		else 
-			throw new AccessDenied("Employee has no access to view information");
-	}
 
 	@Override
 	public ResponseDto updateTempSwipedOutDetails(String email) {
@@ -115,6 +100,7 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		return new ResponseDto(list, 200);
 	}
 
+	// scheduled task 	
 	@Scheduled(cron = "* 38 12 * * *", zone = "Asia/Kolkata")
 	public void updateEntries() {
 		logger.warn("Cron Job starts to update the logged out time");
@@ -127,7 +113,32 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 			tempSwipeDataRepository.delete(temp);
 		}
 		logger.info("Cron job ends");
-
+		// runs for one minute continuously can be stopped using application context
 	}
+	
+	
+	
+	@Override
+	public List<SwipeData> searchSwipeData(String email, String fromDate, String toDate) {
+		List<SwipeData> list = new ArrayList<>();
+		if (employeeRepository.findByemail(email) == null) {
+			logger.warn("Employee's Swipe data is not available");
+			throw new EmployeeNotFoundException("Employee's Swipe data is not available");
+		}
+		Employee employee = employeeRepository.findByemail(email);
+		
+		if (employee.getRole().equals("Admin")) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-yyyy");
+			LocalDate from = YearMonth.parse(fromDate, formatter).atDay(1);
+			LocalDate to = YearMonth.parse(toDate, formatter).atDay(31);
+			list.addAll(swipeDataRepository.findAllByDateBetween(from,to));
+			if(list.size()==0)
+				throw new SwipedException("No employees with swipe history");
+			return list;
+		}
+		else 
+			throw new AccessDenied("Employee has no access to view information");
+	}
+
 
 }

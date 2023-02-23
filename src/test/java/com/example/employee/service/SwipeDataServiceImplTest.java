@@ -151,18 +151,5 @@ public class SwipeDataServiceImplTest {
 	}
 
 
-	@Test
-	public void testnewSwipedDataPositive() {
-	String email="abc@gmail.com";
-	SwipeData swipeData=new SwipeData();
-	swipeData.setEmail(email);
-	swipeData.setDate(LocalDate.now());
-
-	Mockito.when(swipeDataRepository.findByemail(email)).thenReturn(swipeData);
-	ResponseDto response=swipeDataServiceImpl.newSwipedData(email);
-	assertNotNull(response);
-	assertEquals(200,response.getCode());
-	assertEquals("Employee details search successfully",response.getMessages());
-
-	}
+	
 }

@@ -3,6 +3,9 @@ package com.example.employee.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,7 +39,9 @@ public class EmployeeServiceImplTest {
 		emp.setShift("N");
 		emp.setRole("Admin");
 		Mockito.when(empRep.save(emp)).thenReturn(emp);
-		assertEquals("Employee registration is completed", empservimpl.registerEmp(empDto).getMessages());
+		List<String> list=new ArrayList<>();
+		list.add("Employee registration is completed");
+		assertEquals(list, empservimpl.registerEmp(empDto).getMessages());
 	}
 
 	@Test

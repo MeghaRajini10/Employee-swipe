@@ -2,10 +2,11 @@ package com.example.employee.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +18,13 @@ import com.example.employee.dto.ResponseDto;
 import com.example.employee.entity.Employee;
 import com.example.employee.entity.SwipeData;
 import com.example.employee.entity.TempSwipeData;
+import com.example.employee.exception.AccessDenied;
 import com.example.employee.exception.EmployeeNotFoundException;
 import com.example.employee.exception.SwipedException;
 import com.example.employee.repository.EmployeeRepository;
 import com.example.employee.repository.SwipeDataRepository;
 import com.example.employee.repository.TempSwipeDataRepository;
 import com.example.employee.service.SwipeDataService;
-
 
 @Service
 public class SwipeDataServiceImpl implements SwipeDataService {
@@ -36,15 +37,13 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 
 	@Autowired
 	EmployeeRepository employeeRepository;
-	
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(SwipeDataServiceImpl.class);
 
-	
 	@Override
 	public ResponseDto newSwipedData(String email) {
 		Employee employee = employeeRepository.findByemail(email);
-		if(employeeRepository.findByemail(email)==null) {
+		if (employeeRepository.findByemail(email) == null) {
 			logger.warn("Employee hasn't registered yet");
 			throw new EmployeeNotFoundException("Employee hasn't registered yet");
 		}
@@ -55,8 +54,9 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		swipeData.setEmpname(employee.getEmpName());
 		swipeData.setSwipeouttime(null);
 		swipeData.setEmail(employee.getEmail());
-		
-		if(swipeDataRepository.existsByEmail(email))
+
+		LocalDate swippedDate=swipeDataRepository.findByemail(email).getDate();
+		if ( swippedDate==LocalDate.now() && swipeDataRepository.existsByEmail(email) )
 			throw new SwipedException("Employeed already swiped In");
 		swipeDataRepository.save(swipeData);
 
@@ -71,6 +71,26 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		logger.info("Successfull");
 		return new ResponseDto(list, 200);
 
+	}
+
+	@Override
+	public List<SwipeData> searchSwipeData(String email, String fromDate, String toDate) {
+		List<SwipeData> list = new ArrayList<>();
+		if (employeeRepository.findByemail(email) == null) {
+			logger.warn("Employee's Swipe data is not available");
+			throw new EmployeeNotFoundException("Employee's Swipe data is not available");
+		}
+		Employee employee = employeeRepository.findByemail(email);
+		
+		if (employee.getRole().equals("admin")) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-yyyy");
+			LocalDate from = YearMonth.parse(fromDate, formatter).atDay(1);
+			LocalDate to = YearMonth.parse(toDate, formatter).atDay(31);
+			list.addAll(swipeDataRepository.findAllByDateBetween(from,to));
+			return list;
+		}
+		else 
+			throw new AccessDenied("Employee has no access to view information");
 	}
 
 	@Override
@@ -95,8 +115,6 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		return new ResponseDto(list, 200);
 	}
 
-	
-	
 	@Scheduled(cron = "* 38 12 * * *", zone = "Asia/Kolkata")
 	public void updateEntries() {
 		logger.warn("Cron Job starts to update the logged out time");
@@ -110,7 +128,6 @@ public class SwipeDataServiceImpl implements SwipeDataService {
 		}
 		logger.info("Cron job ends");
 
-		
 	}
 
 }

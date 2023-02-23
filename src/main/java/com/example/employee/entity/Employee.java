@@ -2,26 +2,25 @@ package com.example.employee.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class Employee {
 
 	@Id
-	private long empid;
-	private String empname;
-	private String empemail;
-	private String contactnumber;
-	private String branch;
-	private String shift;
-	private String role;
+	public int empId;
+
+	public String empName;
+
+	public String email;
+
+	public String contactNumber;
+
+	public String branch;
+
+	public String shift;
+
+	public String role;
 
 }

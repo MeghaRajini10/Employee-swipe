@@ -3,40 +3,19 @@ package com.example.employee.entity;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-@Entity
-public class TempSwipeData {
-	private long tempswipeid;
-	LocalDateTime tempswipedin;
-	LocalDateTime tempswipedout;
-	private long empid;
-	public long getTempswipeid() {
-		return tempswipeid;
-	}
-	public void setTempswipeid(long tempswipeid) {
-		this.tempswipeid = tempswipeid;
-	}
-	public LocalDateTime getTempswipedin() {
-		return tempswipedin;
-	}
-	public void setTempswipedin(LocalDateTime tempswipedin) {
-		this.tempswipedin = tempswipedin;
-	}
-	public LocalDateTime getTempswipedout() {
-		return tempswipedout;
-	}
-	public void setTempswipedout(LocalDateTime tempswipedout) {
-		this.tempswipedout = tempswipedout;
-	}
-	public long getEmpid() {
-		return empid;
-	}
-	public void setEmpid(long empid) {
-		this.empid = empid;
-	}
-	
-	
-	
-	
-	
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.Data;
 
+@Entity
+@Data
+public class TempSwipeData {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int tempswipeid;
+	private LocalDateTime tempswipedout;
+	private int empid;
+	
+	private String email;
 }

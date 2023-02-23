@@ -7,22 +7,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.employee.dto.EmployeeDto;
 import com.example.employee.dto.ResponseDto;
-import com.example.employee.service.EmployeeService;
+import com.example.employee.service.impl.EmployeeServiceImpl;
 
-@RestController
-@RequestMapping("/employees")
+@RestController("/api/employees")
 public class EmployeeController {
+	
 	@Autowired
-	private EmployeeService empServ;
+	private EmployeeServiceImpl empServ;
 	
 	
-	@PostMapping("/register")
-	public ResponseEntity<ResponseDto> regEmp(@RequestBody @Valid EmployeeDto empDto) {
+	@PostMapping()
+	public ResponseEntity<ResponseDto> registerEmployee(@RequestBody @Valid EmployeeDto empDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(empServ.registerEmp(empDto));
 	}
 

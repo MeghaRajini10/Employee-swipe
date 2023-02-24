@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.employee.dto.EmployeeDto;
 import com.example.employee.dto.ResponseDto;
 import com.example.employee.entity.Employee;
+import com.example.employee.exception.EmployeeAlreadyExistsException;
 import com.example.employee.repository.EmployeeRepository;
 
 @Service
@@ -21,13 +22,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	EmployeeRepository empRepository;
 
 	@Override
-	public ResponseDto registerEmp(EmployeeDto empDto) {
-		List<String> list = new ArrayList<>();
+	public Employee registerEmp(EmployeeDto empDto) {
 		Employee emp1 = empRepository.findByemail(empDto.getEmpemail());
 		if (emp1 != null) {
 			if (empDto.getEmpemail().equals(emp1.getEmail())) {
-				list.add("Employee Already Registered");
-				return new ResponseDto(list,404);
+				throw new EmployeeAlreadyExistsException("Employee Already registered");
 			}
 		}
 		Employee emp = new Employee();
@@ -38,10 +37,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		emp.setBranch(empDto.getBranch());
 		emp.setShift(empDto.getShift());
 		emp.setRole(empDto.getRole());
-		empRepository.save(emp);
+		return empRepository.save(emp);
 		
-		list.add("Employee registration is completed");
-		return new ResponseDto(list,200);
+	
 	}
 
 }

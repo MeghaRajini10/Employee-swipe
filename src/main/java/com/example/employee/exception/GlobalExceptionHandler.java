@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -26,5 +27,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 		ResponseDto response = new ResponseDto(errorDetails, 400);
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(EmployeeAlreadyExistsException.class)
+	public ResponseEntity<Object> handleUserNotFoundException(EmployeeAlreadyExistsException ex, WebRequest req) {
+		List<String> errors = new ArrayList<>();
+		errors.add(ex.getLocalizedMessage());
+		ResponseDto response = new ResponseDto(errors,500);
+		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
 }

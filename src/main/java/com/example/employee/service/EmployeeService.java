@@ -1,9 +1,9 @@
 package com.example.employee.service;
 
 import com.example.employee.dto.EmployeeDto;
-import com.example.employee.dto.ResponseDto;
+import com.example.employee.entity.Employee;
 
 public interface EmployeeService {
-	ResponseDto registerEmp(EmployeeDto empDto);
+	Employee registerEmp(EmployeeDto empDto);
 
 }
